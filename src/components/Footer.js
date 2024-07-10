@@ -1,18 +1,27 @@
+
 import React from 'react';
 import TasksFilter from './TasksFilter';
 
-function Footer({ tasks, clearCompleted }) {
-  const remainingTasks = tasks.filter(task => !task.completed).length;
+function Footer({ tasks, clearCompleted, taskFilter, showAllTasks, showActiveTasks, showCompletedTasks }) {
+  const completedCount = tasks.filter(task => task.completed).length;
+  const activeCount = tasks.length - completedCount;
 
   return (
-    <footer class="footer">
-      <span class="todo-count">
-        <strong>{remainingTasks}</strong> item{remainingTasks !== 1 ? 's' : ''} left
+    <footer className="footer">
+      <span className="todo-count">
+        <strong>{activeCount}</strong> item{activeCount !== 1 && 's'} left
       </span>
-      <TasksFilter />
-      <button class="clear-completed" onClick={clearCompleted}>
-        Clear completed
-      </button>
+      <TasksFilter 
+        taskFilter={taskFilter}
+        onShowAllTask={showAllTasks}
+        onShowActiveTask={showActiveTasks}
+        onShowCompletedTask={showCompletedTasks}
+      />
+      {completedCount > 0 && (
+        <button className="clear-completed" onClick={clearCompleted}>
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 }

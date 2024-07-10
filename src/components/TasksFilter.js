@@ -32,5 +32,4 @@ function TasksFilter({ taskFilter, onShowAllTask, onShowActiveTask, onShowComple
   );
 }
 
-
 export default TasksFilter;

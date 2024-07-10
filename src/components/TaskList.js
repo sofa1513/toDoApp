@@ -1,10 +1,11 @@
+
 import React from 'react';
 import Task from './Task';
 
 function TaskList({ tasks, toggleComplete, removeTask }) {
   return (
-    <section class="main">
-      <ul class="todo-list">
+    <section className="main">
+      <ul className="todo-list">
         {tasks.map(task => (
           <Task
             key={task.id}
