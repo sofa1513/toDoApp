@@ -1,54 +1,28 @@
 
-/* import React from 'react';
-import TasksFilter from './TasksFilter';
-
-function Footer({ tasks, clearCompleted, taskFilter, showAllTasks, showActiveTasks, showCompletedTasks }) {
-  const completedCount = tasks.filter(task => task.completed).length;
-  const activeCount = tasks.length - completedCount;
-
-  return (
-    <footer className="footer">
-      <span className="todo-count">
-        <strong>{activeCount}</strong> item{activeCount !== 1 && 's'} left
-      </span>
-      <TasksFilter 
-        taskFilter={taskFilter}
-        onShowAllTask={showAllTasks}
-        onShowActiveTask={showActiveTasks}
-        onShowCompletedTask={showCompletedTasks}
-      />
-      {completedCount > 0 && (
-        <button className="clear-completed" onClick={clearCompleted}>
-          Clear completed
-        </button>
-      )}
-    </footer>
-  );
-}
-
-export default Footer; */
-
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TasksFilter from './TasksFilter';
 
-function Footer({ tasks = [], clearCompleted, taskFilter, setTaskFilter }) {
-  const remainingTasks = tasks.filter(task => !task.completed).length;
+class Footer extends Component {
+  render() {
+    const { tasks, clearCompleted, taskFilter, setTaskFilter } = this.props;
+    const remainingTasks = tasks.filter(task => !task.completed).length;
 
-  return (
-    <footer className="footer">
-      <span className="todo-count">
-        <strong>{remainingTasks}</strong> {remainingTasks === 1 ? 'item' : 'items'} left
-      </span>
-      <TasksFilter
-        taskFilter={taskFilter}
-        setTaskFilter={setTaskFilter}
-      />
-      <button className="clear-completed" onClick={clearCompleted}>
-        Clear completed
-      </button>
-    </footer>
-  );
+    return (
+      <footer className="footer">
+        <span className="todo-count">
+          <strong>{remainingTasks}</strong> {remainingTasks === 1 ? 'item' : 'items'} left
+        </span>
+        <TasksFilter
+          taskFilter={taskFilter}
+          setTaskFilter={setTaskFilter}
+        />
+        <button className="clear-completed" onClick={clearCompleted}>
+          Clear completed
+        </button>
+      </footer>
+    );
+  }
 }
 
 Footer.propTypes = {

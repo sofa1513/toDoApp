@@ -1,85 +1,27 @@
-/* import React, { useState } from 'react';
 
-function NewTaskForm({ addTask }) {
-  const [text, setText] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!text.trim()) return;
-    addTask({
-      id: Date.now(),
-      text,
-      completed: false
-    });
-    setText('');
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        class="new-todo"
-        placeholder="What needs to be done?"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        autoFocus
-      />
-    </form>
-  );
-}
-/* 
-export default NewTaskForm; */
-
-/* import React, { useState } from 'react';
-
-function NewTaskForm({ addTask }) {
-  const [text, setText] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!text.trim()) return;
-    addTask({
-      id: Date.now(),
-      text,
-      completed: false
-    });
-    setText('');
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        autoFocus
-      />
-    </form>
-  );
-}
-
-export default NewTaskForm; */
-
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-function NewTaskForm({
-  addTask,
-  editingTaskId = null,
-  editingText = '',
-  updateTask,
-  cancelEditing
-}) {
-  const [text, setText] = useState('');
+class NewTaskForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      task: { id: 1 },
+      text: ''
+    };
+  }
 
-  useEffect(() => {
-    if (editingTaskId !== null) {
-      setText(editingText);
+  componentDidUpdate(prevProps) {
+    if (this.props.editingTaskId !== null && this.props.editingTaskId !== prevProps.editingTaskId) {
+      this.setState({ text: this.props.editingText });
     }
-  }, [editingTaskId, editingText]);
+  }
 
-  const handleSubmit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
+    const { text } = this.state;
+    const { addTask, updateTask, editingTaskId } = this.props;
+
     if (!text.trim()) return;
 
     if (editingTaskId !== null) {
@@ -92,23 +34,34 @@ function NewTaskForm({
         createdAt: new Date()
       });
     }
-    setText('');
+    this.setState({ text: '' });
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        autoFocus
-      />
-      {editingTaskId !== null && (
-        <button type="button" onClick={cancelEditing}>Cancel</button>
-      )}
-    </form>
-  );
+  handleChange = (e) => {
+    this.setState({ text: e.target.value });
+  };
+
+  render() {
+    const { editingTaskId, cancelEditing } = this.props;
+    const { text , task } = this.state;
+
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          id={`new-task-${task.id}`}
+          name="new-task"
+          className="new-todo"
+          placeholder="What needs to be done?"
+          value={text}
+          onChange={this.handleChange}
+          autoFocus
+        />
+        {editingTaskId !== null && (
+          <button type="button" onClick={cancelEditing}>Cancel</button>
+        )}
+      </form>
+    );
+  }
 }
 
 NewTaskForm.propTypes = {

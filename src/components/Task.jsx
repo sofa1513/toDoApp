@@ -1,27 +1,32 @@
-
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
 
-function Task({ task, toggleComplete, removeTask, startEditing }) {
-  return (
-    <li className={task.completed ? 'completed' : ''}>
-      <div className="view">
-        <input
-          className="toggle"
-          type="checkbox"
-          checked={task.completed}
-          onChange={() => toggleComplete(task.id)}
-        />
-        <label>
-          <span className="description">{task.text}</span>
-          <span className="created">{`created ${formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}`}</span>
-        </label>
-        <button className="icon icon-edit" onClick={() => startEditing(task.id, task.text)}></button>
-        <button className="icon icon-destroy" onClick={() => removeTask(task.id)}></button>
-      </div>
-    </li>
-  );
+class Task extends Component {
+  render() {
+    const { task, toggleComplete, removeTask, startEditing } = this.props;
+
+    return (
+      <li className={task.completed ? 'completed' : ''}>
+        <div className="view">
+          <input
+            id={`toggle-${task.id}`}
+            name="toggle"
+            className="toggle"
+            type="checkbox"
+            checked={task.completed}
+            onChange={() => toggleComplete(task.id)}
+          />
+          <label htmlFor={`toggle-${task.id}`}>
+            <span className="description">{task.text}</span>
+            <span className="created">{`created ${formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}`}</span>
+          </label>
+          <button className="icon icon-edit" onClick={() => startEditing(task.id, task.text)}></button>
+          <button className="icon icon-destroy" onClick={() => removeTask(task.id)}></button>
+        </div>
+      </li>
+    );
+  }
 }
 
 Task.propTypes = {

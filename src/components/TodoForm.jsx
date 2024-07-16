@@ -1,30 +1,49 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-function TodoForm({ addTodo }) {
-  const [text, setText] = useState('');
+class TodoForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: ''
+    };
+  }
 
-  const handleSubmit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
+    const { text } = this.state;
+    const { addTodo } = this.props;
     if (!text.trim()) return;
     addTodo({
       id: Date.now(),
       text,
       completed: false
     });
-    setText('');
+    this.setState({ text: '' });
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        class="new-todo" 
-        placeholder="What needs to be done?" 
-        value={text}
-        onChange={(e) => setText(e.target.value)} 
-        autoFocus 
-      />
-    </form>
-  );
+  handleChange = (e) => {
+    this.setState({ text: e.target.value });
+  };
+
+  render() {
+    const { text } = this.state;
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input 
+          className="new-todo" 
+          placeholder="What needs to be done?" 
+          value={text}
+          onChange={this.handleChange} 
+          autoFocus 
+        />
+      </form>
+    );
+  }
 }
+
+TodoForm.propTypes = {
+  addTodo: PropTypes.func.isRequired
+};
 
 export default TodoForm;
