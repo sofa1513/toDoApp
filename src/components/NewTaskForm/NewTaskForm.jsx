@@ -1,12 +1,13 @@
 
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './NewTaskForm.css';
 
 class NewTaskForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      task: { id: 1 },
       text: ''
     };
   }
@@ -43,12 +44,11 @@ class NewTaskForm extends Component {
 
   render() {
     const { editingTaskId, cancelEditing } = this.props;
-    const { text , task } = this.state;
+    const { text } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit}>
         <input
-          id={`new-task-${task.id}`}
           name="new-task"
           className="new-todo"
           placeholder="What needs to be done?"
@@ -56,9 +56,7 @@ class NewTaskForm extends Component {
           onChange={this.handleChange}
           autoFocus
         />
-        {editingTaskId !== null && (
-          <button type="button" onClick={cancelEditing}>Cancel</button>
-        )}
+       
       </form>
     );
   }
