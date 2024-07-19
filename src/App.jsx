@@ -84,7 +84,7 @@ class App extends Component {
     return this.state.tasks.filter(task => !task.completed).length;
   };
 
-  render() {
+  /* render() {
     const { tasks, taskFilter, editingTaskId, editingText } = this.state;
     const filteredTasks = this.getFilteredTasks();
     const remainingTasksCount = this.getRemainingTasksCount();
@@ -118,7 +118,41 @@ class App extends Component {
         />
       </section>
     );
-  }
+  } */
+    render() {
+      const { tasks, taskFilter, editingTaskId, editingText } = this.state;
+      const filteredTasks = this.getFilteredTasks();
+      const remainingTasksCount = this.getRemainingTasksCount();
+    
+      return (
+        <section className="todoapp">
+          <header className="header">
+            <h1>todos</h1>
+            <NewTaskForm
+              addTask={this.addTask}
+              updateTask={this.updateTask}
+              cancelEditing={this.cancelEditing}
+            />
+          </header>
+          <TaskList
+            tasks={filteredTasks}
+            toggleComplete={this.toggleComplete}
+            removeTask={this.removeTask}
+            startEditing={this.startEditing}
+            updateTask={this.updateTask}
+            cancelEditing={this.cancelEditing}
+            editingTaskId={editingTaskId}
+          />
+          <Footer
+            remainingTasksCount={remainingTasksCount}
+            clearCompleted={this.clearCompleted}
+            taskFilter={taskFilter}
+            setTaskFilter={this.setTaskFilter}
+          />
+        </section>
+      );
+    }
+    
 }
 
 export default App;

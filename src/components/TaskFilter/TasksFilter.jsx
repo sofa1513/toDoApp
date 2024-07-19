@@ -10,16 +10,16 @@ class TasksFilter extends Component {
     return (
       <ul className="filters">
         <li>
-          <button
-            className={taskFilter === 'All' ? 'selected' : ''}
-            onClick={() => setTaskFilter('All')}
-          >
+        <button
+          className={`${taskFilter === 'All' && 'selected' || ''}`}
+          onClick={() => setTaskFilter('All')}
+        >
             All
           </button>
         </li>
         <li>
           <button
-            className={taskFilter === 'Active' ? 'selected' : ''}
+            className={`${taskFilter === 'Active' && 'selected' || ''}`}
             onClick={() => setTaskFilter('Active')}
           >
             Active
@@ -27,7 +27,7 @@ class TasksFilter extends Component {
         </li>
         <li>
           <button
-            className={taskFilter === 'Completed' ? 'selected' : ''}
+            className={`${taskFilter === 'Completerd' && 'selected' || ''}`}
             onClick={() => setTaskFilter('Completed')}
           >
             Completed

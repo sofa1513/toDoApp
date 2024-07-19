@@ -21,13 +21,12 @@ class NewTaskForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { text } = this.state;
-    const { addTask, updateTask, editingTaskId } = this.props;
+    const { addTask } = this.props;
 
     if (!text.trim()) return;
 
-    if (editingTaskId !== null) {
-      updateTask(editingTaskId, text);
-    } else {
+    
+    {
       addTask({
         id: Date.now(),
         text,
@@ -43,7 +42,6 @@ class NewTaskForm extends Component {
   };
 
   render() {
-    const { editingTaskId, cancelEditing } = this.props;
     const { text } = this.state;
 
     return (
@@ -64,8 +62,6 @@ class NewTaskForm extends Component {
 
 NewTaskForm.propTypes = {
   addTask: PropTypes.func.isRequired,
-  editingTaskId: PropTypes.number,
-  editingText: PropTypes.string,
   updateTask: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired
 };
