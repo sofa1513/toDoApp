@@ -11,7 +11,7 @@ class TasksFilter extends Component {
       <ul className="filters">
         <li>
         <button
-          className={`${taskFilter === 'All' && 'selected' || ''}`}
+          className={`${taskFilter === 'All' && 'selected' }`}
           onClick={() => setTaskFilter('All')}
         >
             All
@@ -19,7 +19,7 @@ class TasksFilter extends Component {
         </li>
         <li>
           <button
-            className={`${taskFilter === 'Active' && 'selected' || ''}`}
+            className={`${taskFilter === 'Active' && 'selected' }`}
             onClick={() => setTaskFilter('Active')}
           >
             Active
@@ -27,7 +27,7 @@ class TasksFilter extends Component {
         </li>
         <li>
           <button
-            className={`${taskFilter === 'Completerd' && 'selected' || ''}`}
+            className={`${taskFilter === 'Completerd' && 'selected' }`}
             onClick={() => setTaskFilter('Completed')}
           >
             Completed
