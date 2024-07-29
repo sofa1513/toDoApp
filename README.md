@@ -1,6 +1,6 @@
 # Versel Link
 
-On https://to-do-app-sigma-nine.vercel.app/ you can look my App
+On https://to-do-app-git-timer-sofias-projects-6cc3b8f1.vercel.app/ you can look my App with timer 
 
 
 # Getting Started with Create React App
