@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import NewTaskForm from './components/NewTaskForm/NewTaskForm';
 import TaskList from './components/TaskList/TaskList';
@@ -16,9 +17,12 @@ class App extends Component {
   }
 
   addTask = (task) => {
+    console.log('Adding task:', task);
     this.setState((prevState) => ({
       tasks: [...prevState.tasks, task]
-    }));
+    }), () => {
+      console.log('Updated tasks:', this.state.tasks);
+    });
   };
 
   toggleComplete = (id) => {
@@ -40,7 +44,7 @@ class App extends Component {
       tasks: prevState.tasks.map(task =>
         task.id === id ? { ...task, text: newText } : task
       ),
-     editingTaskId: null,
+      editingTaskId: null,
       editingText: ''
     }));
   };
@@ -84,8 +88,8 @@ class App extends Component {
     return this.state.tasks.filter(task => !task.completed).length;
   };
 
-  /* render() {
-    const { tasks, taskFilter, editingTaskId, editingText } = this.state;
+  render() {
+    const { tasks, taskFilter, editingTaskId } = this.state;
     const filteredTasks = this.getFilteredTasks();
     const remainingTasksCount = this.getRemainingTasksCount();
 
@@ -93,13 +97,7 @@ class App extends Component {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm
-            addTask={this.addTask}
-            editingTaskId={editingTaskId}
-            editingText={editingText}
-            updateTask={this.updateTask}
-            cancelEditing={this.cancelEditing}
-          />
+          <NewTaskForm addTask={this.addTask} />
         </header>
         <TaskList
           tasks={filteredTasks}
@@ -118,41 +116,7 @@ class App extends Component {
         />
       </section>
     );
-  } */
-    render() {
-      const { tasks, taskFilter, editingTaskId, editingText } = this.state;
-      const filteredTasks = this.getFilteredTasks();
-      const remainingTasksCount = this.getRemainingTasksCount();
-    
-      return (
-        <section className="todoapp">
-          <header className="header">
-            <h1>todos</h1>
-            <NewTaskForm
-              addTask={this.addTask}
-              updateTask={this.updateTask}
-              cancelEditing={this.cancelEditing}
-            />
-          </header>
-          <TaskList
-            tasks={filteredTasks}
-            toggleComplete={this.toggleComplete}
-            removeTask={this.removeTask}
-            startEditing={this.startEditing}
-            updateTask={this.updateTask}
-            cancelEditing={this.cancelEditing}
-            editingTaskId={editingTaskId}
-          />
-          <Footer
-            remainingTasksCount={remainingTasksCount}
-            clearCompleted={this.clearCompleted}
-            taskFilter={taskFilter}
-            setTaskFilter={this.setTaskFilter}
-          />
-        </section>
-      );
-    }
-    
+  }
 }
 
 export default App;

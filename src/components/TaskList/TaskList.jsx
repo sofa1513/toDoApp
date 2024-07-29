@@ -2,11 +2,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Task from '../Task/Task';
-import './TaskList.css';
+
 
 class TaskList extends Component {
   render() {
     const { tasks, toggleComplete, removeTask, startEditing, editingTaskId, updateTask, cancelEditing } = this.props;
+    console.log('Rendering TaskList with tasks:', tasks);  
 
     return (
       <section className="main">
@@ -35,7 +36,9 @@ TaskList.propTypes = {
       id: PropTypes.number.isRequired,
       text: PropTypes.string.isRequired,
       completed: PropTypes.bool.isRequired,
-      createdAt: PropTypes.instanceOf(Date).isRequired
+      createdAt: PropTypes.instanceOf(Date).isRequired,
+      min: PropTypes.number.isRequired,
+      sec: PropTypes.number.isRequired
     })
   ).isRequired,
   toggleComplete: PropTypes.func.isRequired,
@@ -51,4 +54,3 @@ TaskList.defaultProps = {
 };
 
 export default TaskList;
- 

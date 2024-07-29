@@ -2,13 +2,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
+import Timer from '../Timer/Timer';
 import './Task.css';
 
 class Task extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editText: this.props.task.text
+      editText: this.props.task.text,
     };
   }
 
@@ -43,30 +44,33 @@ class Task extends Component {
       <li className={isEditing ? 'editing' : task.completed ? 'completed' : ''}>
         <div className="view">
           <input
-            id={`toggle-${task.id}`}
             className="toggle"
             type="checkbox"
             checked={task.completed}
             onChange={() => toggleComplete(task.id)}
           />
-          <label htmlFor={`toggle-${task.id}`}>
-            <span className="description">{task.text}</span>
-            <span className="created">{`created ${formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}`}</span>
+          <label>
+            <span className="title">{task.text}</span>
+            <span className="description">
+              <Timer min={task.min} sec={task.sec} />
+            </span>
+            <span className="description">
+              created {formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}
+            </span>
           </label>
           <button className="icon icon-edit" onClick={() => this.props.startEditing(task.id, task.text)}></button>
           <button className="icon icon-destroy" onClick={() => removeTask(task.id)}></button>
         </div>
         {isEditing && (
-          <form  id={`edit-form-${task.id}`} onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <input
-              id={`edit-form-${task.id}`}
               type="text"
               className="edit"
               value={editText}
               onChange={this.handleChange}
               autoFocus
             />
-            <button type="button" onClick={this.handleCancel}>Cancel</button>
+            <button type="button" onClick={this.handleCancel}>Отменить</button>
           </form>
         )}
       </li>
@@ -79,14 +83,16 @@ Task.propTypes = {
     id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired
+    createdAt: PropTypes.instanceOf(Date).isRequired,
+    min: PropTypes.number.isRequired,
+    sec: PropTypes.number.isRequired,
   }).isRequired,
   toggleComplete: PropTypes.func.isRequired,
   removeTask: PropTypes.func.isRequired,
   startEditing: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired,
-  editingTaskId: PropTypes.number
+  editingTaskId: PropTypes.number,
 };
 
 export default Task;

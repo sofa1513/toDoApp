@@ -8,62 +8,75 @@ class NewTaskForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: ''
+      text: '',
+      min: '',
+      sec: ''
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.editingTaskId !== null && this.props.editingTaskId !== prevProps.editingTaskId) {
-      this.setState({ text: this.props.editingText });
-    }
-  }
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(`Changed: ${name} to ${value}`);
+    this.setState({ [name]: value });
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { text } = this.state;
-    const { addTask } = this.props;
+    const { text, min, sec } = this.state;
+    console.log('Form Submitted:', { text, min, sec });
 
-    if (!text.trim()) return;
-
-    
-    {
-      addTask({
-        id: Date.now(),
+    if (text.trim() && min.trim() && sec.trim()) {
+      const newTask = {
         text,
+        min: parseInt(min, 10),
+        sec: parseInt(sec, 10),
+        id: Date.now(),
         completed: false,
         createdAt: new Date()
-      });
+      };
+      console.log('New task to add:', newTask);
+      this.props.addTask(newTask);
+      this.setState({ text: '', min: '', sec: '' });
+    } else {
+      console.log('Invalid input:', { text, min, sec });
     }
-    this.setState({ text: '' });
-  };
-
-  handleChange = (e) => {
-    this.setState({ text: e.target.value });
   };
 
   render() {
-    const { text } = this.state;
+    const { text, min, sec } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="new-todo-form" onSubmit={this.handleSubmit}>
         <input
-          name="new-task"
           className="new-todo"
-          placeholder="What needs to be done?"
+          name="text"
+          placeholder="Task"
           value={text}
           onChange={this.handleChange}
           autoFocus
         />
-       
+        <input
+          className="new-todo-form__timer"
+          name="min"
+          placeholder="Min"
+          value={min}
+          onChange={this.handleChange}
+        />
+        <input
+          className="new-todo-form__timer"
+          name="sec"
+          placeholder="Sec"
+          value={sec}
+          onChange={this.handleChange}
+        />
+        <button type="submit" style={{ display: 'none' }}></button>
       </form>
     );
   }
 }
 
 NewTaskForm.propTypes = {
-  addTask: PropTypes.func.isRequired,
-  updateTask: PropTypes.func.isRequired,
-  cancelEditing: PropTypes.func.isRequired
+  addTask: PropTypes.func.isRequired
 };
 
 export default NewTaskForm;

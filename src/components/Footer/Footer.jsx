@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TasksFilter from '../TaskFilter/TasksFilter';
+import './Footer.css'
 
 class Footer extends Component {
   render() {
