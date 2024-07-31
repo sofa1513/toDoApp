@@ -1,5 +1,4 @@
 
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './NewTaskForm.css';
@@ -16,14 +15,13 @@ class NewTaskForm extends Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Changed: ${name} to ${value}`);
+    
     this.setState({ [name]: value });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { text, min, sec } = this.state;
-    console.log('Form Submitted:', { text, min, sec });
 
     if (text.trim() && min.trim() && sec.trim()) {
       const newTask = {
@@ -34,12 +32,10 @@ class NewTaskForm extends Component {
         completed: false,
         createdAt: new Date()
       };
-      console.log('New task to add:', newTask);
+      
       this.props.addTask(newTask);
       this.setState({ text: '', min: '', sec: '' });
-    } else {
-      console.log('Invalid input:', { text, min, sec });
-    }
+    } 
   };
 
   render() {
@@ -53,21 +49,31 @@ class NewTaskForm extends Component {
           placeholder="Task"
           value={text}
           onChange={this.handleChange}
+          required
           autoFocus
         />
         <input
           className="new-todo-form__timer"
           name="min"
+          type="number" 
           placeholder="Min"
           value={min}
           onChange={this.handleChange}
+          required
+          min="0" 
+          step="1" 
         />
         <input
           className="new-todo-form__timer"
           name="sec"
+          type="number" 
           placeholder="Sec"
           value={sec}
           onChange={this.handleChange}
+          required
+          min="0" 
+          max="59" 
+          step="1" 
         />
         <button type="submit" style={{ display: 'none' }}></button>
       </form>

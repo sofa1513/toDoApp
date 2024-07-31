@@ -27,7 +27,7 @@ class TasksFilter extends Component {
         </li>
         <li>
           <button
-            className={`${taskFilter === 'Completerd' && 'selected' }`}
+            className={`${taskFilter === 'Completed' && 'selected' }`}
             onClick={() => setTaskFilter('Completed')}
           >
             Completed

@@ -17,12 +17,9 @@ class App extends Component {
   }
 
   addTask = (task) => {
-    console.log('Adding task:', task);
     this.setState((prevState) => ({
       tasks: [...prevState.tasks, task]
-    }), () => {
-      console.log('Updated tasks:', this.state.tasks);
-    });
+    }));
   };
 
   toggleComplete = (id) => {
@@ -48,6 +45,27 @@ class App extends Component {
       editingText: ''
     }));
   };
+
+  updateTimer = (id, min, sec) => {
+    this.setState((prevState) => ({
+      tasks: prevState.tasks.map(task =>
+        task.id === id ? { ...task, min, sec } : task
+      )
+    }));
+  };
+
+  updateTaskTime = (taskId, min, sec) => {
+    this.setState((prevState) => {
+      const updatedTasks = prevState.tasks.map((task) => {
+        if (task.id === taskId) {
+          return { ...task, min, sec };
+        }
+        return task;
+      });
+      return { tasks: updatedTasks };
+    });
+  };
+  
 
   clearCompleted = () => {
     this.setState((prevState) => ({
@@ -92,6 +110,7 @@ class App extends Component {
     const { tasks, taskFilter, editingTaskId } = this.state;
     const filteredTasks = this.getFilteredTasks();
     const remainingTasksCount = this.getRemainingTasksCount();
+    
 
     return (
       <section className="todoapp">
@@ -107,6 +126,8 @@ class App extends Component {
           updateTask={this.updateTask}
           cancelEditing={this.cancelEditing}
           editingTaskId={editingTaskId}
+          updateTimer={this.updateTimer}
+          updateTaskTime={this.updateTaskTime} 
         />
         <Footer
           remainingTasksCount={remainingTasksCount}

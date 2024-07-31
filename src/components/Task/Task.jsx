@@ -1,4 +1,5 @@
 
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
@@ -35,6 +36,11 @@ class Task extends Component {
     cancelEditing();
   };
 
+  handleTimerUpdate = (min, sec) => {
+    const { updateTaskTime, task } = this.props;
+    updateTaskTime(task.id, min, sec);
+  };
+
   render() {
     const { task, toggleComplete, removeTask, editingTaskId } = this.props;
     const { editText } = this.state;
@@ -52,7 +58,12 @@ class Task extends Component {
           <label>
             <span className="title">{task.text}</span>
             <span className="description">
-              <Timer min={task.min} sec={task.sec} />
+              <Timer
+                min={task.min}
+                sec={task.sec}
+                onUpdate={this.handleTimerUpdate}
+                completed={task.completed} 
+              />
             </span>
             <span className="description">
               created {formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}
@@ -70,7 +81,7 @@ class Task extends Component {
               onChange={this.handleChange}
               autoFocus
             />
-            <button type="button" onClick={this.handleCancel}>Отменить</button>
+            <button type="button" onClick={this.handleCancel}></button>
           </form>
         )}
       </li>
@@ -93,6 +104,8 @@ Task.propTypes = {
   updateTask: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired,
   editingTaskId: PropTypes.number,
+  updateTaskTime: PropTypes.func.isRequired,
 };
 
 export default Task;
+

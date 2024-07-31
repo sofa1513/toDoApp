@@ -3,55 +3,58 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
 class Timer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      min: props.min,
-      sec: props.sec,
-      isRunning: false,
-    };
-    this.interval = null;
+  interval = null; 
+
+  componentDidMount() {
+    this.startTimer(); 
   }
 
-  componentWillUnmount() {
-    if (this.interval) {
-      clearInterval(this.interval);
+  componentDidUpdate(prevProps) {
+    if (this.props.completed !== prevProps.completed) {
+      if (this.props.completed) {
+        this.clearTimer(); 
+      } else {
+        this.startTimer(); 
+      }
     }
   }
 
+  componentWillUnmount() {
+    this.clearTimer(); 
+  }
+
+  clearTimer = () => {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+  };
+
   startTimer = () => {
-    if (this.interval) return;
-    this.setState({ isRunning: true });
+    this.clearTimer(); 
     this.interval = setInterval(() => {
-      this.setState(({ min, sec }) => {
-        if (sec > 0) {
-          return { sec: sec - 1 };
-        }
-        if (min > 0) {
-          return { min: min - 1, sec: 59 };
-        }
-        clearInterval(this.interval);
-        return { isRunning: false };
-      });
+      const { min, sec, onUpdate } = this.props;
+      if (sec > 0) {
+        onUpdate(min, sec - 1);
+      } else if (min > 0) {
+        onUpdate(min - 1, 59);
+      } else {
+        this.clearTimer(); 
+      }
     }, 1000);
   };
 
   pauseTimer = () => {
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
-      this.setState({ isRunning: false });
-    }
+    this.clearTimer(); 
   };
 
   render() {
-    const { min, sec, isRunning } = this.state;
+    const { min, sec } = this.props;
     return (
       <span className="timer">
-        <button className="icon icon-play" onClick={this.startTimer} disabled={isRunning}></button>
-        <button className="icon icon-pause" onClick={this.pauseTimer} disabled={!isRunning}></button>
+        <button className="icon icon-play" onClick={this.startTimer}></button>
+        <button className="icon icon-pause" onClick={this.pauseTimer}></button>
         {min}:{sec < 10 ? `0${sec}` : sec}
       </span>
     );
@@ -61,6 +64,8 @@ class Timer extends Component {
 Timer.propTypes = {
   min: PropTypes.number.isRequired,
   sec: PropTypes.number.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  completed: PropTypes.bool.isRequired, 
 };
 
 export default Timer;

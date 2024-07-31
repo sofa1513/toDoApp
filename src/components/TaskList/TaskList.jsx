@@ -3,11 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Task from '../Task/Task';
 
-
 class TaskList extends Component {
   render() {
-    const { tasks, toggleComplete, removeTask, startEditing, editingTaskId, updateTask, cancelEditing } = this.props;
-    console.log('Rendering TaskList with tasks:', tasks);  
+    const { tasks, toggleComplete, removeTask, startEditing, editingTaskId, updateTask, cancelEditing, updateTaskTime } = this.props;
 
     return (
       <section className="main">
@@ -22,6 +20,7 @@ class TaskList extends Component {
               updateTask={updateTask}
               cancelEditing={cancelEditing}
               editingTaskId={editingTaskId}
+              updateTaskTime={updateTaskTime}
             />
           ))}
         </ul>
@@ -46,7 +45,8 @@ TaskList.propTypes = {
   startEditing: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired,
-  editingTaskId: PropTypes.number
+  editingTaskId: PropTypes.number,
+  updateTaskTime: PropTypes.func.isRequired,
 };
 
 TaskList.defaultProps = {
