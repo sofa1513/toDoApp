@@ -1,11 +1,11 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './TaskFilter.css';
 
-class TasksFilter extends Component {
-  render() {
-    const { taskFilter, setTaskFilter } = this.props;
+const TasksFilter = ({ taskFilter, setTaskFilter }) => {
+
+
 
     return (
       <ul className="filters">
@@ -36,16 +36,12 @@ class TasksFilter extends Component {
       </ul>
     );
   }
-}
 
 TasksFilter.propTypes = {
   taskFilter: PropTypes.string.isRequired,
   setTaskFilter: PropTypes.func.isRequired
 };
 
-TasksFilter.defaultProps = {
-  taskFilter: 'All',
-  setTaskFilter: () => {}
-};
+
 
 export default TasksFilter;

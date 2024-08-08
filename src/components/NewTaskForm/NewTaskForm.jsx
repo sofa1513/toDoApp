@@ -1,27 +1,26 @@
-
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './NewTaskForm.css';
 
-class NewTaskForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: '',
-      min: '',
-      sec: ''
-    };
-  }
+const NewTaskForm = ({ addTask }) => {
+  const [text, setText] = useState('');
+  const [min, setMin] = useState('');
+  const [sec, setSec] = useState('');
 
-  handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     
-    this.setState({ [name]: value });
+    if (name === 'text') {
+      setText(value);
+    } else if (name === 'min') {
+      setMin(value);
+    } else if (name === 'sec') {
+      setSec(value);
+    }
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { text, min, sec } = this.state;
 
     if (text.trim() && min.trim() && sec.trim()) {
       const newTask = {
@@ -33,53 +32,51 @@ class NewTaskForm extends Component {
         createdAt: new Date()
       };
       
-      this.props.addTask(newTask);
-      this.setState({ text: '', min: '', sec: '' });
+      addTask(newTask);
+      setText('');
+      setMin('');
+      setSec('');
     } 
   };
 
-  render() {
-    const { text, min, sec } = this.state;
-
-    return (
-      <form className="new-todo-form" onSubmit={this.handleSubmit}>
-        <input
-          className="new-todo"
-          name="text"
-          placeholder="Task"
-          value={text}
-          onChange={this.handleChange}
-          required
-          autoFocus
-        />
-        <input
-          className="new-todo-form__timer"
-          name="min"
-          type="number" 
-          placeholder="Min"
-          value={min}
-          onChange={this.handleChange}
-          required
-          min="0" 
-          step="1" 
-        />
-        <input
-          className="new-todo-form__timer"
-          name="sec"
-          type="number" 
-          placeholder="Sec"
-          value={sec}
-          onChange={this.handleChange}
-          required
-          min="0" 
-          max="59" 
-          step="1" 
-        />
-        <button type="submit" style={{ display: 'none' }}></button>
-      </form>
-    );
-  }
-}
+  return (
+    <form className="new-todo-form" onSubmit={handleSubmit}>
+      <input
+        className="new-todo"
+        name="text"
+        placeholder="Task"
+        value={text}
+        onChange={handleChange}
+        required
+        autoFocus
+      />
+      <input
+        className="new-todo-form__timer"
+        name="min"
+        type="number" 
+        placeholder="Min"
+        value={min}
+        onChange={handleChange}
+        required
+        min="0" 
+        step="1" 
+      />
+      <input
+        className="new-todo-form__timer"
+        name="sec"
+        type="number" 
+        placeholder="Sec"
+        value={sec}
+        onChange={handleChange}
+        required
+        min="0" 
+        max="59" 
+        step="1" 
+      />
+      <button type="submit" style={{ display: 'none' }}></button>
+    </form>
+  );
+};
 
 NewTaskForm.propTypes = {
   addTask: PropTypes.func.isRequired

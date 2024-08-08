@@ -1,11 +1,18 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Task from '../Task/Task';
 
-class TaskList extends Component {
-  render() {
-    const { tasks, toggleComplete, removeTask, startEditing, editingTaskId, updateTask, cancelEditing, updateTaskTime } = this.props;
+const TaskList = ({
+  tasks = [], 
+  toggleComplete, 
+  removeTask, 
+  startEditing, 
+  editingTaskId,  
+  updateTask, 
+  cancelEditing, 
+  updateTaskTime 
+})  => {
 
     return (
       <section className="main">
@@ -27,7 +34,7 @@ class TaskList extends Component {
       </section>
     );
   }
-}
+
 
 TaskList.propTypes = {
   tasks: PropTypes.arrayOf(
@@ -49,8 +56,5 @@ TaskList.propTypes = {
   updateTaskTime: PropTypes.func.isRequired,
 };
 
-TaskList.defaultProps = {
-  tasks: []
-};
 
 export default TaskList;

@@ -1,28 +1,28 @@
 
-
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
 import Timer from '../Timer/Timer';
 import './Task.css';
 
-class Task extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editText: this.props.task.text,
-    };
-  }
+const Task = ({
+  task,
+  toggleComplete,
+  removeTask,
+  startEditing,
+  updateTask,
+  cancelEditing,
+  editingTaskId,
+  updateTaskTime,
+}) => {
+  const [editText, setEditText] = useState(task.text);
 
-  handleChange = (e) => {
-    this.setState({ editText: e.target.value });
+  const handleChange = (e) => {
+    setEditText(e.target.value);
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { task, updateTask, cancelEditing } = this.props;
-    const { editText } = this.state;
-
     if (editText.trim()) {
       updateTask(task.id, editText);
     } else {
@@ -30,64 +30,58 @@ class Task extends Component {
     }
   };
 
-  handleCancel = () => {
-    const { cancelEditing } = this.props;
-    this.setState({ editText: this.props.task.text });
+  const handleCancel = () => {
+    setEditText(task.text);
     cancelEditing();
   };
 
-  handleTimerUpdate = (min, sec) => {
-    const { updateTaskTime, task } = this.props;
+  const handleTimerUpdate = (min, sec) => {
     updateTaskTime(task.id, min, sec);
   };
 
-  render() {
-    const { task, toggleComplete, removeTask, editingTaskId } = this.props;
-    const { editText } = this.state;
-    const isEditing = task.id === editingTaskId;
+  const isEditing = task.id === editingTaskId;
 
-    return (
-      <li className={isEditing ? 'editing' : task.completed ? 'completed' : ''}>
-        <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            checked={task.completed}
-            onChange={() => toggleComplete(task.id)}
-          />
-          <label>
-            <span className="title">{task.text}</span>
-            <span className="description">
-              <Timer
-                min={task.min}
-                sec={task.sec}
-                onUpdate={this.handleTimerUpdate}
-                completed={task.completed} 
-              />
-            </span>
-            <span className="description">
-              created {formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}
-            </span>
-          </label>
-          <button className="icon icon-edit" onClick={() => this.props.startEditing(task.id, task.text)}></button>
-          <button className="icon icon-destroy" onClick={() => removeTask(task.id)}></button>
-        </div>
-        {isEditing && (
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="text"
-              className="edit"
-              value={editText}
-              onChange={this.handleChange}
-              autoFocus
+  return (
+    <li className={isEditing ? 'editing' : task.completed ? 'completed' : ''}>
+      <div className="view">
+        <input
+          className="toggle"
+          type="checkbox"
+          checked={task.completed}
+          onChange={() => toggleComplete(task.id)}
+        />
+        <label>
+          <span className="title">{task.text}</span>
+          <span className="description">
+            <Timer
+              min={task.min}
+              sec={task.sec}
+              onUpdate={handleTimerUpdate}
+              completed={task.completed}
             />
-            <button type="button" onClick={this.handleCancel}></button>
-          </form>
-        )}
-      </li>
-    );
-  }
-}
+          </span>
+          <span className="description">
+            created {formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}
+          </span>
+        </label>
+        <button className="icon icon-edit" onClick={() => startEditing(task.id, task.text)}></button>
+        <button className="icon icon-destroy" onClick={() => removeTask(task.id)}></button>
+      </div>
+      {isEditing && (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="edit"
+            value={editText}
+            onChange={handleChange}
+            autoFocus
+          />
+          <button type="button" onClick={handleCancel}></button>
+        </form>
+      )}
+    </li>
+  );
+};
 
 Task.propTypes = {
   task: PropTypes.shape({
@@ -108,4 +102,3 @@ Task.propTypes = {
 };
 
 export default Task;
-

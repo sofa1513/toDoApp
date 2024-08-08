@@ -1,143 +1,116 @@
 
-import React, { Component } from 'react';
+
+import React, { useState } from 'react';
 import NewTaskForm from './components/NewTaskForm/NewTaskForm';
 import TaskList from './components/TaskList/TaskList';
 import Footer from './components/Footer/Footer';
 import './App.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tasks: [],
-      taskFilter: 'All',
-      editingTaskId: null,
-      editingText: ''
-    };
-  }
+const App = () => {
+  const [tasks, setTasks] = useState([]);
+  const [taskFilter, setTaskFilter] = useState('All');
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editingText, setEditingText] = useState('');
 
-  addTask = (task) => {
-    this.setState((prevState) => ({
-      tasks: [...prevState.tasks, task]
-    }));
+  const addTask = (task) => {
+    setTasks((prevTasks) => [...prevTasks, task]);
   };
 
-  toggleComplete = (id) => {
-    this.setState((prevState) => ({
-      tasks: prevState.tasks.map(task =>
+  const toggleComplete = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
       )
-    }));
+    );
   };
 
-  removeTask = (id) => {
-    this.setState((prevState) => ({
-      tasks: prevState.tasks.filter(task => task.id !== id)
-    }));
+  const removeTask = (id) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
-  updateTask = (id, newText) => {
-    this.setState((prevState) => ({
-      tasks: prevState.tasks.map(task =>
+  const updateTask = (id, newText) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === id ? { ...task, text: newText } : task
-      ),
-      editingTaskId: null,
-      editingText: ''
-    }));
+      )
+    );
+    setEditingTaskId(null);
+    setEditingText('');
   };
 
-  updateTimer = (id, min, sec) => {
-    this.setState((prevState) => ({
-      tasks: prevState.tasks.map(task =>
+  const updateTimer = (id, min, sec) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === id ? { ...task, min, sec } : task
       )
-    }));
+    );
   };
 
-  updateTaskTime = (taskId, min, sec) => {
-    this.setState((prevState) => {
-      const updatedTasks = prevState.tasks.map((task) => {
-        if (task.id === taskId) {
-          return { ...task, min, sec };
-        }
-        return task;
-      });
-      return { tasks: updatedTasks };
-    });
-  };
-  
-
-  clearCompleted = () => {
-    this.setState((prevState) => ({
-      tasks: prevState.tasks.filter(task => !task.completed)
-    }));
+  const updateTaskTime = (taskId, min, sec) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, min, sec } : task
+      )
+    );
   };
 
-  startEditing = (id, text) => {
-    this.setState({
-      editingTaskId: id,
-      editingText: text
-    });
+  const clearCompleted = () => {
+    setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
   };
 
-  cancelEditing = () => {
-    this.setState({
-      editingTaskId: null,
-      editingText: ''
-    });
+  const startEditing = (id, text) => {
+    setEditingTaskId(id);
+    setEditingText(text);
   };
 
-  setTaskFilter = (filter) => {
-    this.setState({ taskFilter: filter });
+  const cancelEditing = () => {
+    setEditingTaskId(null);
+    setEditingText('');
   };
 
-  getFilteredTasks = () => {
-    const { tasks, taskFilter } = this.state;
+  const getFilteredTasks = () => {
     if (taskFilter === 'Active') {
-      return tasks.filter(task => !task.completed);
+      return tasks.filter((task) => !task.completed);
     }
     if (taskFilter === 'Completed') {
-      return tasks.filter(task => task.completed);
+      return tasks.filter((task) => task.completed);
     }
     return tasks;
   };
 
-  getRemainingTasksCount = () => {
-    return this.state.tasks.filter(task => !task.completed).length;
+  const getRemainingTasksCount = () => {
+    return tasks.filter((task) => !task.completed).length;
   };
 
-  render() {
-    const { tasks, taskFilter, editingTaskId } = this.state;
-    const filteredTasks = this.getFilteredTasks();
-    const remainingTasksCount = this.getRemainingTasksCount();
-    
+  const filteredTasks = getFilteredTasks();
+  const remainingTasksCount = getRemainingTasksCount();
 
-    return (
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <NewTaskForm addTask={this.addTask} />
-        </header>
-        <TaskList
-          tasks={filteredTasks}
-          toggleComplete={this.toggleComplete}
-          removeTask={this.removeTask}
-          startEditing={this.startEditing}
-          updateTask={this.updateTask}
-          cancelEditing={this.cancelEditing}
-          editingTaskId={editingTaskId}
-          updateTimer={this.updateTimer}
-          updateTaskTime={this.updateTaskTime} 
-        />
-        <Footer
-          remainingTasksCount={remainingTasksCount}
-          clearCompleted={this.clearCompleted}
-          taskFilter={taskFilter}
-          setTaskFilter={this.setTaskFilter}
-        />
-      </section>
-    );
-  }
-}
+  return (
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+        <NewTaskForm addTask={addTask} />
+      </header>
+      <TaskList
+        tasks={filteredTasks}
+        toggleComplete={toggleComplete}
+        removeTask={removeTask}
+        startEditing={startEditing}
+        updateTask={updateTask}
+        cancelEditing={cancelEditing}
+        editingTaskId={editingTaskId}
+        updateTimer={updateTimer}
+        updateTaskTime={updateTaskTime}
+        editingText={editingText}
+      />
+      <Footer
+        remainingTasksCount={remainingTasksCount}
+        clearCompleted={clearCompleted}
+        taskFilter={taskFilter}
+        setTaskFilter={setTaskFilter}
+      />
+    </section>
+  );
+};
 
 export default App;
